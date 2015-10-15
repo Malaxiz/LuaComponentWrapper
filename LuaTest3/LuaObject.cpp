@@ -12,7 +12,7 @@
 LuaObject::LuaObject(LuaScript* script)
     : _script(script)
     , _L(script->getState())
-    , _name(script->getName().c_str())
+    , _path(script->getPath().c_str())
 {
     if(script->doFile() == -1)
         error = true;
@@ -20,6 +20,10 @@ LuaObject::LuaObject(LuaScript* script)
         error = false;
         _objectReference = luaL_ref(_L, LUA_REGISTRYINDEX);
     }
+}
+
+LuaObject::~LuaObject() {
+    lua_unref(_L, _objectReference);
 }
 
 void LuaObject::selectScript() {
@@ -37,10 +41,15 @@ void LuaObject::beginFunctionCall(std::string function) {
 }
 
 void LuaObject::endFunctionCall(int argc, int results) {
-    lua_call(_L, argc, results);
+    lua_call(_L, argc + 1, results);
+}
+
+void LuaObject::endFunctionCall() {
+    endFunctionCall(0, 0);
 }
 
 void LuaObject::pushObject() {
     selectScript();
     lua_pushvalue(_L, -1);
+    lua_pop(_L, 1);
 }

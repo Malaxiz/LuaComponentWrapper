@@ -19,19 +19,21 @@ class LuaObject {
     
 public:
     LuaObject(LuaScript* script);
+    ~LuaObject();
     
     void selectScript();
     void selectReference(std::string reference);
     
     void beginFunctionCall(std::string function);
     void endFunctionCall(int argc, int results);
+    void endFunctionCall();
     
     void pushObject();
     
 private:
     LuaScript* _script;
     lua_State* _L;
-    const char* _name;
+    const char* _path;
     int _objectReference;
     
     bool error;

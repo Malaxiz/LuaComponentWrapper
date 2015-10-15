@@ -21,6 +21,8 @@ public:
     
     void onLoop();
     
+    LuaObject* getObject();
+    
 private:
     LuaObject _object;
     

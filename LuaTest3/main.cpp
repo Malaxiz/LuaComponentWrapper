@@ -15,22 +15,37 @@ extern "C" {
 }
 
 #include "LuaBridge/LuaBridge.h"
-
 #include "Component.h"
 
 
 int main(int argc, const char * argv[]) {
 
     lua_State* L = luaL_newstate();
-    luaL_openlibs(L);
-    luaL_dofile(L, "class.lua");
     
-    LuaScript script(L, "Animal.lua");
-    Component component(&script);
-    Component component2(&script);
+    {
+        
+        luaL_openlibs(L);
+        LuaScript(L, "resources/class.lua").doFile();
+        
+        LuaScript animalScript(L, "resources/Animal.lua");
+        Component animalComponent(&animalScript);
+        Component animalComponent2(&animalScript);
+        
+        LuaScript humanScript(L, "resources/Human.lua");
+        Component humanComponent(&humanScript);
+        
+        animalComponent.onLoop(); // aC1 = 1
+        animalComponent.onLoop(); // aC1 = 2
+        animalComponent2.onLoop(); // aC2 = 1
+        
+        humanComponent.getObject()->beginFunctionCall("humanStuff");
+        animalComponent.getObject()->pushObject();
+        humanComponent.getObject()->endFunctionCall(1, 0); // aC1 = 0
+        
+        animalComponent.onLoop(); // aC1 = 1
     
-    component.onLoop();
-    component.onLoop();
-    component2.onLoop();
+    }
+    
+    lua_close(L);
     
 }

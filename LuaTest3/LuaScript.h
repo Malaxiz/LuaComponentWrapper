@@ -22,16 +22,16 @@ extern "C" {
 class LuaScript {
     
 public:
-    LuaScript(lua_State* L, std::string name);
+    LuaScript(lua_State* L, std::string path);
     
     int doFile();
     
     lua_State* getState();
-    std::string getName();
+    std::string getPath();
     
 private:
     lua_State* _L;
-    std::string _name;
+    std::string _path;
     
 };
 

@@ -17,5 +17,9 @@ Component::Component(LuaScript* script)
 
 void Component::onLoop() {
     _object.beginFunctionCall("onLoop");
-    _object.endFunctionCall(1, 0);
+    _object.endFunctionCall();
+}
+
+LuaObject* Component::getObject() {
+    return &_object;
 }

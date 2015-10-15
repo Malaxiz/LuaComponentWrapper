@@ -11,16 +11,16 @@
 #include "LuaScript.h"
 
 
-LuaScript::LuaScript(lua_State* L, std::string name)
+LuaScript::LuaScript(lua_State* L, std::string path)
     : _L(L)
-    , _name(name)
+    , _path(path)
 {
     
 }
 
 int LuaScript::doFile() {
-    if(luaL_dofile(_L, _name.c_str())) {
-        std::cout << "No such script: " << _name << ".\n";
+    if(luaL_dofile(_L, _path.c_str())) {
+        std::cout << "Error in script: " << _path << ". (either the file doesn't exist or there was an error before loading it)\n";
         return -1;
     }
     
@@ -31,6 +31,6 @@ lua_State* LuaScript::getState() {
     return _L;
 }
 
-std::string LuaScript::getName() {
-    return _name;
+std::string LuaScript::getPath() {
+    return _path;
 }
